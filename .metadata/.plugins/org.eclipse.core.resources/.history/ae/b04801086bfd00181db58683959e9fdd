@@ -1,0 +1,118 @@
+package algorithm;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+public class LRUAlgoCacheImpl<K,V> extends AbstractAlgoCache<K, V> {
+
+	
+	class node<K, V>{
+		
+		node<K,V> previous;
+		node<K,V> next;
+		K key;
+		V value;
+		
+		public node(K key, V value) {
+			super();
+			this.key = key;
+			this.value = value;
+		}
+	}
+	
+	private Map<K, node<K,V>> cacheElements = new HashMap<>();
+	private node<K,V>head;
+	private node<K,V>tail;
+	
+	public LRUAlgoCacheImpl(int capacity) {
+		super(capacity);
+		
+		this.capacity = capacity;
+	}
+
+	@Override
+	public V getElement(K key) {
+		
+		CacheNode<K, V> node = (CacheNode)nodes.get(key);
+		if(node != null)
+		{
+			moveToHead(node);
+			return node.value;
+		}else
+			return null;
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		
+		CacheNode node = (CacheNode)nodes.get(key);
+		if(node==null)
+		{
+			if(currentSize >= cacheSize)
+			{
+				if(last != null)
+					nodes.remove(last.key);
+				removeLast();
+			}else {
+				currentSize++;
+			}
+			node = new CacheNode<K, V>();
+		}
+		node.value = value;
+		node.key = key;
+		moveToHead(node);
+		nodes.put(key, node);
+		
+		
+		return node.value;
+	}
+
+	@Override
+	public V removeElement(K key) {
+		
+		return null;
+	}
+	
+	private void putAsHead(node<K, V> node) {
+		node.next = head;
+		node.previous = null;
+
+		if (head != null) {
+			head.previous = node;
+		}
+
+		head = node;
+
+		if (tail == null) {
+			tail = head;
+		}
+	}
+	
+	private void moveToHead(node<K, V> node) {
+		// If node is already at head, do nothing and simply return
+		if (node == head) {
+			return;
+		}
+
+		// remove the node from LinkedList
+		node.previous.next = node.next;
+		if (node.next != null) {
+			node.next.previous = node.previous;
+		} else {
+			tail = node.previous;
+		}
+
+		// put the node at head
+		putAsHead(node);
+	}
+	
+	private void removeTail() {
+		cacheElements.remove(tail.key);
+
+		tail = tail.previous;
+		tail.next = null;
+	}
+	
+
+}

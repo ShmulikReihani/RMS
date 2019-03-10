@@ -1,0 +1,215 @@
+package com.hit.algorithm;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map.Entry;
+
+public class SecondChance<K, V> extends AbstractAlgoCache<K, V> {
+
+	private LinkedHashMap<K,V> cache;
+	private LinkedHashMap<K,Integer> cacheCounter;
+	
+	public SecondChance(int capacity) {
+		super(capacity);
+		cache =new LinkedHashMap<K, V>();
+		cacheCounter= new LinkedHashMap<K,Integer>();
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		
+		
+		if(cache.containsKey(key))
+		{
+			//System.out.println("(cacheCounter.get(key) - "+cacheCounter.get(key));
+			if(cacheCounter.get(key)==0)
+			{
+				cacheCounter.put(key, cacheCounter.get(key)+1);
+			//	System.out.println("if(cacheCounter.get(key)==0) - cacheCounter: "+cacheCounter.toString());
+			}
+		}
+		else if(cache.size() == capacity)
+		{
+				
+			K rm = findSecondChance();	
+			cacheCounter.remove(rm);
+			cache.remove(rm);
+	        cacheCounter.put(key,0);
+	        cache.put(key, value); 
+			 
+	       // System.out.println("cache.size() == capacity - cacheCounter: "+cacheCounter.toString());
+		}
+		else
+		{
+			cacheCounter.put(key, 0);
+			cache.put(key, value);
+		//	System.out.println(" - cacheCounter: "+cacheCounter.toString());
+		}
+		
+		return value;
+	}
+
+	@Override
+	public V getElement(K key) {
+		if(cache.containsKey(key))
+		{
+			return cache.get(key);
+		}
+		return null;
+	}
+	
+	private K findSecondChance()
+	{
+		K[] cacheCounterKeys =(K[]) cacheCounter.keySet().toArray();
+		int i=0;
+		for (Entry<K, V> entry : cache.entrySet()) // Itrate through hashmap
+		{ 
+			if (entry.getKey()==cacheCounterKeys[i]) {                
+				if(cacheCounter.get(cacheCounterKeys[i])==1)//This will check if the key got a second chance
+				{
+					cacheCounter.put(cacheCounterKeys[i],0); // If he got a second chance he removes the flag
+				}
+				else
+				{
+					return cacheCounterKeys[i]; // If not he will return the key to remove by fifo rule
+					
+				}
+			}
+			i++;
+		}
+		return null;
+	}
+	
+	public void print()
+	{
+		System.out.println("cache: "+cache.toString());
+		System.out.println("cacheCounter: "+cacheCounter.toString());
+	}
+	
+	/*class Node<K, V>{
+		
+		K key;
+		V value;
+		Integer bit;
+		
+		public Node( K key,V value) {
+			super();
+			this.key = key;
+			this.value = value;
+			this.bit = 0;
+		}
+	}
+	
+	HashMap< K , V > cache;
+	ArrayList<Node<K,V>> lastUsedList;
+	
+	public int CacheSize= 0;
+	
+	public SecondChance(int capacity) {
+		super(capacity);
+		cache = new HashMap<K,V>(capacity);
+		
+		lastUsedList = new ArrayList<Node<K,V>>();
+		
+		
+	}
+
+	@Override
+	public V getElement(K key) {
+		
+		
+		for(int i=0; i<lastUsedList.size(); i++)
+		{
+			if(lastUsedList.get(i).key == key)
+				return lastUsedList.get(i).value;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		Node temp = new Node<K, V>(key, value);
+		int index = seeIfHere(key, value);
+		if(CacheSize<capacity)
+		{
+	
+			
+			if(index != -1)
+			{ 
+				if(lastUsedList.get(index).bit==0)
+					lastUsedList.get(index).bit++;
+			}
+			else {
+				cache.put(key, value);
+				lastUsedList.add(temp);
+				CacheSize++;
+			}
+			
+		}
+		else {
+			if(index != -1)
+			{
+				if(lastUsedList.get(index).bit==0)
+					lastUsedList.get(index).bit++;
+			}
+			else 
+			{	
+				for(int i=0; i<lastUsedList.size(); i++)
+				{
+						if(lastUsedList.get(i).bit == 0)
+						{
+							cache.remove(lastUsedList.get(i));
+							lastUsedList.remove(i);
+							cache.put(key, value);
+							lastUsedList.add(temp);
+							bitZero();
+							return value;
+						}	
+				}
+			}
+			
+		}
+		return value;
+	}
+	
+	public void printCache() {
+		
+		last.forEach( (key,node) -> {
+			System.out.println("key: "+ key +" value: "+ node.value + " bit: " + node.bit);
+		});
+		lastUsedList.forEach(node ->{
+			System.out.println("key: "+ node.key +" value: "+ node.value + " bit: " + node.bit);
+		});
+		
+		System.out.println(cache.toString());
+		
+	}
+
+	
+	public int seeIfHere(K key, V value)
+	{
+		for(int i=0; i< lastUsedList.size(); i++)
+			if(lastUsedList.get(i).value == value)
+				return i;
+		return -1;
+	}
+	
+	public void bitZero()
+	{
+		for(int i=0; i< lastUsedList.size(); i++)
+			lastUsedList.get(i).bit = 0;
+	}
+	
+	@Override
+	public void removeElement(K key) {
+		for(int i=0; i< lastUsedList.size(); i++)
+			if(lastUsedList.get(i).key == key)
+				lastUsedList.remove(i);
+		cache.remove(key);
+	}*/
+
+}

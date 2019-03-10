@@ -1,0 +1,86 @@
+package com.hit.memory;
+
+import com.hit.algorithm.IAlgoCache;
+import com.hit.algorithm.SecondChance;
+import com.hit.dao.IDao;
+import com.hit.dm.DataModel;
+
+public class CacheUnit<T>{
+
+	IAlgoCache<Long,DataModel<T>> algo;
+	IDao<Long,DataModel<T>> dao;
+
+	
+	
+	public CacheUnit(IAlgoCache<Long, DataModel<T>> algo, IDao<Long, DataModel<T>> dao){
+		super();
+		this.algo = algo;
+		this.dao = dao;
+	}
+	
+	
+	public DataModel<T>[] getDataModels(Long[] ids) 
+	{
+		DataModel<T>[] temp = new DataModel[1];
+		DataModel<T> tt;
+		for(int i=0; i < ids.length; i++)
+		{
+			
+			tt =  dao.find(ids[i]);
+			if(temp.length == 1)
+				temp[1]= tt;
+			if(tt != null)
+			{
+				
+				DataModel<T>[] tempNew = new DataModel[temp.length+1];
+				System.arraycopy(temp, 0, tempNew, 0, temp.length);
+				temp = tempNew;
+				temp[temp.length] = tt;
+			}
+		}
+		
+		
+		return temp;
+	}
+	
+	public DataModel<T>[] putDataModels(DataModel<T>[] datamodels)
+	{
+		DataModel<T> temp;
+		for(int i=0; i < datamodels.length; i++)
+		{
+			algo.putElement(datamodels[i].getDataModelId(), datamodels[i]);
+			//temp = algo.getElement(datamodels[i].getDataModelId())
+			//dao.save(temp);
+			
+		}
+		
+		for(int i=0; i < datamodels.length; i++)
+		{
+			temp = algo.getElement(datamodels[i].getDataModelId());
+			if(temp!=null)
+			{
+				//System.out.println(temp.getDataModelId());
+				dao.save(temp);
+			}
+		}
+		
+		return datamodels;
+		
+	}
+	
+	public void removeDataModels(java.lang.Long[] ids) 
+	{
+		DataModel<T> temp;
+		for(int i=0; i < ids.length; i++)
+		{
+			algo.removeElement(ids[i]);
+			temp = dao.find(ids[i]);
+			dao.delete(temp);
+		}
+	}
+	
+	public void printfile()
+	{
+		dao.printAll();
+	}
+}

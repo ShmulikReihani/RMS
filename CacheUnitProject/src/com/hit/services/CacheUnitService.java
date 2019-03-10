@@ -1,0 +1,111 @@
+package com.hit.services;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.hit.algorithm.IAlgoCache;
+import com.hit.algorithm.LRUAlgoCacheImpl;
+import com.hit.algorithm.SecondChance;
+import com.hit.dao.DaoFileImpl;
+import com.hit.dao.IDao;
+import com.hit.dm.DataModel;
+import com.hit.memory.CacheUnit;
+
+public class CacheUnitService<T> {
+
+	IAlgoCache<Long,DataModel<T>> algo;
+	IDao<Long,DataModel<T>> dao;
+	CacheUnit<T> cacheUnit;
+	int capacity;
+	private DataModel<T> dataModel = null;
+	
+	private int swapsNumber = 0;
+	
+	public CacheUnitService() {
+		super();
+		this.capacity = 10;
+		this.algo = new SecondChance<>(capacity);
+		this.dao = new DaoFileImpl<>("resources//datasource.txt");
+		this.cacheUnit = new CacheUnit<>(algo, dao);
+		
+	}
+
+	public boolean update(DataModel<T>[] dataModels)
+	{
+		Long ids[] = new Long[dataModels.length];
+		for(int i=0; i<ids.length; i++)
+		{
+			ids[i] = dataModels[i].getDataModelId();
+		}
+		
+		this.swapsNumber+=dataModels.length;
+		
+		cacheUnit.removeDataModels(ids);
+		cacheUnit.putDataModels(dataModels);
+		
+		return true;	
+	}
+	
+	public boolean delete(DataModel<T>[] dataModels)
+	{
+		Long[] ids = new Long[1];
+		int top = -1;
+		
+		for(int i=0; i< dataModels.length; i++)
+		{
+			if(top == ids.length - 1)
+			{
+				int length = ids.length;
+				Long[] tempNew = new Long[ids.length+1];
+				System.arraycopy(ids, 0, tempNew, 0, length);
+				ids = tempNew;
+			}
+			top++;
+			ids[top] = dataModels[i].getDataModelId();
+		}
+		
+		cacheUnit.removeDataModels(ids);
+		
+		return true;
+		
+	}
+	
+	public DataModel<T>[] get(DataModel<T>[] dataModels)
+	{
+		
+		Long[] ids = new Long[1];
+		int top = -1;
+		
+		for(int i=0; i< dataModels.length; i++)
+		{
+			if(top == ids.length - 1)
+			{
+				int length = ids.length;
+				Long[] tempNew = new Long[ids.length+1];
+				System.arraycopy(ids, 0, tempNew, 0, length);
+				ids = tempNew;
+			}
+			top++;
+			ids[top] = dataModels[i].getDataModelId();
+		}
+		
+		DataModel<T>[] get = cacheUnit.getDataModels(ids);
+		
+		return get;
+	}
+	
+	// methods below added to support more statistics
+	public int getSwapsNumber() {
+		return this.swapsNumber;
+	}
+
+	public int getCapacity() {
+		return this.capacity;
+	}
+	
+	
+	
+}

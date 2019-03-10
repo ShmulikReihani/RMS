@@ -1,0 +1,48 @@
+package com.hit.algorithm;
+
+import java.util.LinkedHashMap;
+
+public class SecondChance<K, V> extends AbstractAlgoCache<K, V> {
+	
+	class Node{
+		
+		Integer key;
+		Integer bit;
+		
+		public Node( Integer key,Integer bit) {
+			super();
+			this.key = key;
+			this.bit = bit;
+		}
+		
+	}
+	
+	
+	public SecondChance(int capacity) {
+		super(capacity);
+		
+	}
+
+	@Override
+	public V getElement(K key) {
+		
+		return null;
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		if(capacity<CacheSize)
+		{
+			
+		}
+			
+		return null;
+	}
+
+	@Override
+	public void removeElement(K key) {
+		
+		
+	}
+
+}

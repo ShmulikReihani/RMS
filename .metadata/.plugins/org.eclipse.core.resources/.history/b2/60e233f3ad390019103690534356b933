@@ -1,0 +1,205 @@
+package com.hit.algorithm;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class LRUAlgoCacheImpl<K,V> extends AbstractAlgoCache<K, V> {
+
+	private Map<K, Node<K, V>> cacheElements;
+	private Node<K, V> head;
+	private Node<K, V> tail;
+	private final String name = "LRU";
+
+	public LRUAlgoCacheImpl(int capacity) {
+		super(capacity);
+		this.cacheElements = new HashMap<>();
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+
+	public V getElement(K key) {
+
+		if (this.cacheElements.containsKey(key)) {
+			final Node<K, V> n = this.cacheElements.get(key);
+
+			moveToHead(n);
+
+			return n.value;
+		}
+
+		return null;
+	}
+
+	public V putElement(K key, V value) {
+		V replacedValue = null;
+		
+		if (this.cacheElements.containsKey(key)) {
+			final Node<K, V> old = this.cacheElements.get(key);
+			// replacedValue = old.value;
+			old.value = value;
+			moveToHead(old);
+		} else {
+			final Node<K, V> created = new Node<>(key, value);
+
+			if (this.cacheElements.size() >= capacity) {
+				putAsHead(created);
+				replacedValue = removeTail().value;
+			} else {
+				putAsHead(created);
+			}
+
+			this.cacheElements.put(key, created);
+		}
+		
+		return replacedValue;
+	}
+
+	public void removeElement(K key) {
+		if (!this.cacheElements.containsKey(key)) return;
+		
+		removeNode(key);
+	}
+	
+	private static class Node<K, V> {
+		K key;
+		V value;
+		Node<K, V> next;
+		Node<K, V> previous;
+
+		private Node(K key, V value) {
+			this.key = key;
+			this.value = value;
+		}
+	}
+	
+	private Node<K,V> removeHead() {
+		this.cacheElements.remove(this.head.key);
+		Node<K,V> temp = this.head;
+		this.head = this.head.next;
+		this.head.previous = null;
+		return temp;
+	}
+	
+	private Node<K,V> removeTail() {
+		this.cacheElements.remove(this.tail.key);
+		Node<K,V> temp = this.tail;
+		this.tail = this.tail.previous;
+		this.tail.next = null;
+		return temp;
+	}
+	
+	private Node<K,V> removeNode(K key) {			
+		if (key == this.head.key) {
+			return removeHead();
+		}
+		else if (key == this.tail.key) {
+			return removeTail();
+		}	
+		else {
+			Node<K,V> current = this.head;
+			
+			while (current != null) {
+				if (current.key == key) {
+					this.cacheElements.remove(key);
+					current.previous.next = current.next;
+					current.next.previous = current.previous;
+					return current;
+				}
+				else {
+					current = current.next;
+				}
+			}	
+		}
+		return null;
+	}
+
+	private void moveToHead(Node<K, V> node) {
+		// If node is already at this.head, do nothing and simply return
+		if (node == this.head) {
+			return;
+		}
+
+		// remove the node from LinkedList
+		node.previous.next = node.next;
+		if (node.next != null) {
+			node.next.previous = node.previous;
+		} else {
+			this.tail = node.previous;
+		}
+
+		// put the node at this.head
+		putAsHead(node);
+	}
+
+	private void putAsHead(Node<K, V> node) {
+		node.next = this.head;
+		node.previous = null;
+
+		if (this.head != null) {
+			this.head.previous = node;
+		}
+
+		this.head = node;
+
+		if (this.tail == null) {
+			this.tail = this.head;
+		}
+	}
+	
+//	public LRUAlgoCacheImpl(int capacity) {
+//		super(capacity);
+//	}
+//	
+//	public int CacheSize= 0;
+//
+//	@Override
+//	public V putElement(K key, V value) {
+//		if(CacheSize<capacity)
+//		{
+//			list.addFirst(key);
+//			map.put(key, value);
+//			CacheSize++;	
+//			return value;
+//		}
+//
+//		else {
+//			list.addFirst(key);
+//			list.addFirst(list.pollLast());
+//			K tempk=list.getFirst();;
+//			V tempv=map.get(tempk);
+//			map.remove(tempk);
+//			map.put(key, value);
+//			return tempv;		
+//		}
+//		
+//	}
+//
+//	@Override
+//	public V getElement(K key) {
+//		if( map.containsKey(key)){
+//			K temp= list.get(list.indexOf(key));
+//			list.remove(list.get(list.indexOf(key)));
+//			list.addFirst(temp);
+//			return map.get(temp);
+//		}
+//		return null;
+//	}
+//
+//	public void print()
+//	{
+//		@SuppressWarnings("unchecked")
+//		Set<Integer> keys = (Set<Integer>) map.keySet();  //get all keys
+//		for(Integer i: keys)
+//		{
+//		    System.out.println(map.get(i));
+//		}
+//	}
+
+	
+	
+
+}

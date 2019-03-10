@@ -1,0 +1,38 @@
+package algorithm;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+public class LRUAlgoCacheImpl<K,V> extends AbstractAlgoCache<K, V> {
+
+	
+	
+	
+	public LRUAlgoCacheImpl(int capacity) {
+		super(capacity);
+		
+		
+	}
+
+	@Override
+	public V getElement(K key) {
+		
+		
+		
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		
+		
+	}
+
+	@Override
+	public V removeElement(K key) {
+		
+		
+	}
+	
+
+}

@@ -1,0 +1,83 @@
+package com.hit.algorithm;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import com.hit.algorithm.SecondChance.Node;
+
+public class ClassMain {
+
+	public static void main(String[] args) {
+		
+		
+		
+		
+		SecondChance<Integer, Integer> sec = new SecondChance<>(0);
+		
+		Integer v;
+		
+		v= sec.putElement(1, 1);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(2, 2);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(3, 3);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(4, 4);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(5, 1);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(6, 2);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(7, 5);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(8, 1);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(9, 2);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(10, 3);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(11, 4);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(12, 5);
+		System.out.println(v);
+		
+		
+		
+	//	System.out.println(sec.cache);
+		sec.printCache();
+	}
+
+}

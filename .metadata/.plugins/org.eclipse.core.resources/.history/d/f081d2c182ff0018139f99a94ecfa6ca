@@ -1,0 +1,119 @@
+package com.hit.algorithm;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import com.hit.algorithm.SecondChance.Node;
+
+public class ClassMain {
+
+	public static void main(String[] args) {
+		
+		/*class Node<K, V>{
+			
+			K key;
+			V value;
+			Integer bit;
+			
+			public Node( K key,V value) {
+				super();
+				this.key = key;
+				this.value = value;
+				this.bit = 0;
+			}
+		}
+		
+		HashMap<Integer , Node<Integer, Integer>> cache = new HashMap<Integer,Node<Integer, Integer>>(0);
+		LinkedList<Node<Integer, Integer>> array = new LinkedList<>();
+		
+		public void putElement(K key, V value) {
+			Node temp = new Node<K, V>(key, value);
+			if(capacity<CacheSize)
+			{
+				if(cache.containsKey(key))
+				{
+					if(cache.get(key).bit==0)
+						cache.get(key).bit++;
+				}
+				cache.put(key, temp);
+				array.add(temp);
+				return value;
+			}
+			else {
+				if(cache.containsKey(key))
+					if(cache.get(key).bit==0)
+						cache.get(key).bit++;
+				boolean found = true;
+				int i=0;
+				while(found)
+				{
+					Node t = array.get(i);
+					if(t.bit != 0)
+					{
+						cache.put((K) t.key, t);
+						array.remove(i);
+						array.add(t);
+						found = false;
+					}
+					i++;
+				}
+			}
+			return value;
+		}*/
+		
+		
+		SecondChance<Integer, Integer> sec = new SecondChance<>(0);
+		
+		Integer v;
+		
+		v= sec.putElement(1, 1);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(2, 2);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(3, 3);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(4, 4);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(5, 1);
+		System.out.println(v);
+		
+		sec.printCache();
+		
+		v= sec.putElement(6, 2);
+		System.out.println(v);
+		
+		v= sec.putElement(7, 5);
+		System.out.println(v);
+		
+		v= sec.putElement(8, 1);
+		System.out.println(v);
+		
+		v= sec.putElement(9, 2);
+		System.out.println(v);
+		
+		v= sec.putElement(10, 3);
+		System.out.println(v);
+		
+		v= sec.putElement(11, 4);
+		System.out.println(v);
+		
+		v= sec.putElement(12, 5);
+		System.out.println(v);
+		
+	//	System.out.println(sec.cache);
+		sec.printCache();
+	}
+
+}

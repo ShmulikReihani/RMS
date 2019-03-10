@@ -1,0 +1,5 @@
+package algorithm;
+
+public class RandomAlgoCacheImpl<K, V> extends AbstractAlgoCache<K, V>{
+
+}

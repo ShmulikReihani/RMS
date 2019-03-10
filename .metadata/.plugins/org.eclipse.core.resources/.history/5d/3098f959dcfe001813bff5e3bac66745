@@ -1,0 +1,15 @@
+package com.hit.algorithm;
+
+public class ClassMain {
+
+	public static void main(String[] args) {
+		
+		SecondChance<Integer, Integer> sec = new SecondChance<>(0);
+		
+		Integer v;
+		
+		v= sec.putElement(1, 1);
+
+	}
+
+}

@@ -1,0 +1,54 @@
+package algorithm;
+
+public class LRUAlgoCacheImpl<K,V> extends AbstractAlgoCache<K, V> {
+
+	
+	class CacheNode<T, U>{
+		
+		CacheNode<T,U> previous;
+		CacheNode<T,U> next;
+		T key;
+		U value;
+		
+		public CacheNode(LRUAlgoCacheImpl<K, V>.CacheNode<T, U> previous, LRUAlgoCacheImpl<K, V>.CacheNode<T, U> next,
+				T key, U value) {
+			super();
+			this.previous = previous;
+			this.next = next;
+			this.key = key;
+			this.value = value;
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	public LRUAlgoCacheImpl(int capacity) {
+		super(capacity);
+		
+	}
+
+	@Override
+	public V getElement(K key) {
+		
+		return null;
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		
+		return null;
+	}
+
+	@Override
+	public V removeElement(K key) {
+		
+		return null;
+	}
+
+}

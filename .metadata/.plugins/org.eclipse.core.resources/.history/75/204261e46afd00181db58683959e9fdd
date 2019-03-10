@@ -1,0 +1,82 @@
+package algorithm;
+
+import java.util.Hashtable;
+
+public class LRUAlgoCacheImpl<K,V> extends AbstractAlgoCache<K, V> {
+
+	
+	class node<K, V>{
+		
+		node<K,V> previous;
+		node<K,V> next;
+		K key;
+		V value;
+		
+		public node(K key, V value) {
+			super();
+			this.key = key;
+			this.value = value;
+		}
+		
+				
+		
+	}
+	
+	private int cacheSize;
+	private Hashtable<K, CacheNode<K,V>> nodes;
+	private int currentSize;
+	private CacheNode<K, V> first;
+	private CacheNode<K, V> last;
+	
+	public LRUAlgoCacheImpl(int capacity) {
+		super(capacity);
+		
+		this.currentSize = 0;
+		this.cacheSize = capacity;
+		this.nodes = new Hashtable<K, CacheNode<K,V>>(capacity);
+	}
+
+	@Override
+	public V getElement(K key) {
+		
+		CacheNode<K, V> node = (CacheNode)nodes.get(key);
+		if(node != null)
+		{
+			moveToHead(node);
+			return node.value;
+		}else
+			return null;
+	}
+
+	@Override
+	public V putElement(K key, V value) {
+		
+		CacheNode node = (CacheNode)nodes.get(key);
+		if(node==null)
+		{
+			if(currentSize >= cacheSize)
+			{
+				if(last != null)
+					nodes.remove(last.key);
+				removeLast();
+			}else {
+				currentSize++;
+			}
+			node = new CacheNode<K, V>();
+		}
+		node.value = value;
+		node.key = key;
+		moveToHead(node);
+		nodes.put(key, node);
+		
+		
+		return node.value;
+	}
+
+	@Override
+	public V removeElement(K key) {
+		
+		return null;
+	}
+
+}
